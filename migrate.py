@@ -23,3 +23,5 @@ if __name__ == "__main__":
     insert_qa()
     insert_bp()
     insert_fb()
+    sqlite_cur.close()
+    sqlite_conn.close()

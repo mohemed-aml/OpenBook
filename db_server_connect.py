@@ -36,8 +36,6 @@ def insert_textbooks():
             pg_conn.rollback()
             
     finally:
-        sqlite_cur.close()
-        sqlite_conn.close()
         if pg_cur is not None:
             pg_cur.close()
         if pg_conn is not None:
@@ -66,8 +64,6 @@ def insert_chapters():
             pg_conn.rollback()
             
     finally:
-        sqlite_cur.close()
-        sqlite_conn.close()
         if pg_cur is not None:
             pg_cur.close()
         if pg_conn is not None:
@@ -96,8 +92,6 @@ def insert_qa():
             pg_conn.rollback()
             
     finally:
-        sqlite_cur.close()
-        sqlite_conn.close()
         if pg_cur is not None:
             pg_cur.close()
         if pg_conn is not None:
@@ -126,8 +120,6 @@ def insert_bp():
             pg_conn.rollback()
             
     finally:
-        sqlite_cur.close()
-        sqlite_conn.close()
         if pg_cur is not None:
             pg_cur.close()
         if pg_conn is not None:
@@ -156,8 +148,6 @@ def insert_fb():
             pg_conn.rollback()
             
     finally:
-        sqlite_cur.close()
-        sqlite_conn.close()
         if pg_cur is not None:
             pg_cur.close()
         if pg_conn is not None:
