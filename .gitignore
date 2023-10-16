@@ -7,6 +7,7 @@ models/wizardlm-13b-v1.1.Q5_K_M.gguf
 raw_data/test.db
 openbook/
 node_modules
+moneybagvenv
 
 
 
