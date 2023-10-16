@@ -6,6 +6,7 @@ models/mistral-7b-v0.1.Q6_K.gguf
 models/wizardlm-13b-v1.1.Q5_K_M.gguf
 raw_data/test.db
 openbook/
+node_modules
 
 
 
