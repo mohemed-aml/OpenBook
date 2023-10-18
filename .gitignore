@@ -8,7 +8,7 @@ raw_data/test.db
 openbook/
 node_modules
 moneybagvenv
-
+token.txt
 
 
 

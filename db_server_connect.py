@@ -1,32 +1,34 @@
 import sqlite3
 import psycopg2
+import yaml
+
+with open('creds.yaml', 'r') as f:
+    yaml_data = yaml.load(f, Loader=yaml.SafeLoader)
+    postgres_data = yaml_data.get('postgres', {})
 
 db_params = {
     'host': 'localhost',
     'port': '5432',
     'dbname': 'book',
-    'user': 'postgres',
-    'password': 'Aby@36261',
+    'user': postgres_data.get('username'),
+    'password': postgres_data.get('password'),
 }
 
 sqlite_conn = sqlite3.connect('raw_data/book.db')
 sqlite_cur = sqlite_conn.cursor()
 
-
-
 ############################################### Migration code #########################################################
 def insert_textbooks():
-    sqlite_cur.execute("SELECT * FROM Textbooks;")
+    sqlite_cur.execute("SELECT * FROM textbooks;")
     data = sqlite_cur.fetchall()
-    data = data[1:]
     try:
         pg_conn = psycopg2.connect(**db_params)
         pg_cur = pg_conn.cursor()
     
         for row in data:
-            pg_cur.execute("""
-                           INSERT INTO Textbooks ( book_title ) VALUES (%s);
-                           """, row) 
+            # print("INSERT INTO textbooks (book_title) VALUES ('%s');"% row[1])
+            pg_cur.execute("INSERT INTO textbooks (textbook_id, book_title) VALUES (%s, '%s');"% row)
+
         pg_conn.commit()
         print(f"The textbook table has been migrated successfully!")
 
@@ -44,17 +46,14 @@ def insert_textbooks():
  
            
 def insert_chapters():
-    sqlite_cur.execute("SELECT * FROM Chapters;")
+    sqlite_cur.execute("SELECT * FROM chapters;")
     data = sqlite_cur.fetchall()
-    data = data[1:]
     try:
         pg_conn = psycopg2.connect(**db_params)
         pg_cur = pg_conn.cursor()
     
         for row in data:
-            pg_cur.execute("""
-                           INSERT INTO chapters ( textbook_id, chapter_title ) VALUES (%s, %s);
-                           """, row) 
+            pg_cur.execute("INSERT INTO chapters (chapter_id, textbook_id, chapter_title) VALUES (%s, %s, '%s');"% row) 
         pg_conn.commit()
         print(f"The chapters table has been migrated successfully!")
 
@@ -72,17 +71,16 @@ def insert_chapters():
 
 
 def insert_qa():
-    sqlite_cur.execute("SELECT * FROM Question_Answers;")
+    sqlite_cur.execute("SELECT * FROM question_answers;")
     data = sqlite_cur.fetchall()
-    data = data[1:]
     try:
         pg_conn = psycopg2.connect(**db_params)
         pg_cur = pg_conn.cursor()
     
         for row in data:
             pg_cur.execute("""
-                           INSERT INTO question_answers ( chapter_id, question, answer ) VALUES (%s, %s, %s);
-                           """, row) 
+                           INSERT INTO question_answers (question_id, chapter_id, question, answer) VALUES (%s, %s, '%s', '%s');
+                           """% row)
         pg_conn.commit()
         print(f"The chapters table has been migrated successfully!")
 
@@ -100,17 +98,16 @@ def insert_qa():
             
             
 def insert_bp():
-    sqlite_cur.execute("SELECT * FROM BulletPoints;")
+    sqlite_cur.execute("SELECT * FROM bulletpoints;")
     data = sqlite_cur.fetchall()
-    data = data[1:]
     try:
         pg_conn = psycopg2.connect(**db_params)
         pg_cur = pg_conn.cursor()
     
         for row in data:
             pg_cur.execute("""
-                           INSERT INTO bulletpoints ( chapter_id, bullet_point ) VALUES (%s, %s);
-                           """, row) 
+                           INSERT INTO bulletpoints (bp_id, chapter_id, bullet_point) VALUES (%s, %s, '%s');
+                           """% row) 
         pg_conn.commit()
         print(f"The chapters table has been migrated successfully!")
 
@@ -128,17 +125,16 @@ def insert_bp():
 
 
 def insert_fb():
-    sqlite_cur.execute("SELECT * FROM FillInTheBlanks;")
+    sqlite_cur.execute("SELECT * FROM fillintheblanks;")
     data = sqlite_cur.fetchall()
-    data = data[1:]
     try:
         pg_conn = psycopg2.connect(**db_params)
         pg_cur = pg_conn.cursor()
     
         for row in data:
             pg_cur.execute("""
-                           INSERT INTO fillintheblanks ( chapter_id, fb_question, fb_answer ) VALUES (%s, %s, %s);
-                           """, row) 
+                           INSERT INTO fillintheblanks (fb_id, chapter_id, fb_question, fb_answer) VALUES (%s, %s, '%s', '%s');
+                           """% row) 
         pg_conn.commit()
         print(f"The chapters table has been migrated successfully!")
 
