@@ -1,0 +1,16 @@
+postgres_local_db:
+  username: xxxxxxxxxxx
+  password: xxxxxxxxxxx
+  db_name: book
+  host: localhost
+  port: 5432
+
+postgres_aws_db:
+  username: xxxxxxxxxxx
+  password: xxxxxxxxxxx
+  db_name: openbook
+  host: xxxxxxxxxxx
+  port: 5432
+
+SSL_certificate:
+  passphrase: xxxxxxxxxxx

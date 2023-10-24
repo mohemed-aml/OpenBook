@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.textbook {
+    border: 1px solid #aaa;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.textbook:hover {
+    background-color: #eaeaea;
+}
+
+.roadmap-container {
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    scroll-snap-type: x mandatory;
+    white-space: nowrap;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 0; /* Add padding to the roadmap container */
+}
+
+.roadmap {
+    display: inline-flex;
+    justify-content: space-between; /* Spread markers equally */
+    align-items: center;
+    border-radius: 50px; /* Rounded background */
+    border: 3px solid #EEE3CB;
+    background-color: #D7C0AE; /* Background color for the roadmap */
+    width: calc(100% - 20px); /* Adjust for marker margins */
+    height: calc(70px);
+    padding: 0 10px; /* Add padding to the roadmap */
+    scroll-snap-align: start;
+    box-sizing: content-box; /* Prevent child elements from affecting width */
+}
+
+.marker {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: #EEE3CB;
+    border-radius: 50%;
+    border: 3px solid #867070;
+    color: #867070;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0; /* Remove margin between markers */
+    cursor: pointer;
+    /* transition: background-color 0.3s ease; */
+}
+
+.marker:hover {
+    background-color: #867070;
+    color: #EEE3CB;
+}
+
+.marker-tooltip {
+    display: none;
+    position: absolute; 
+    background-color: rgb(167, 20, 20);
+    border: 1px solid #000000;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}

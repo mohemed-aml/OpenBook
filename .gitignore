@@ -1,14 +1,26 @@
-models/llama-2-7b-chat.Q5_K_M.gguf
-models/llama-2-13b-chat.Q5_K_M.gguf
-models/llama-2-13b-chat.Q5_K_S.gguf
-models/mistral-7b-openorca.Q6_K.gguf
-models/mistral-7b-v0.1.Q6_K.gguf
-models/wizardlm-13b-v1.1.Q5_K_M.gguf
-raw_data/test.db
-openbook/
-node_modules
+# root directory
+vscode
 moneybagvenv
-token.txt
+node_modules
+secrets
+.env
+package-lock.json
+package.json
+
+# llm code
+/llm code/__pycache__
+/llm code/models/llama-2-7b-chat.Q5_K_M.gguf
+/llm code/models/llama-2-13b-chat.Q5_K_M.gguf
+/llm code/models/llama-2-13b-chat.Q5_K_S.gguf
+/llm code/models/mistral-7b-openorca.Q6_K.gguf
+/llm code/models/mistral-7b-v0.1.Q6_K.gguf
+/llm code/models/wizardlm-13b-v1.1.Q5_K_M.gguf
+/llm code/raw_data/test.db
+
+#server
+/server/config/creds.yaml
+
+
 
 
 
