@@ -1,5 +1,5 @@
 # root directory
-vscode
+.vscode
 moneybagvenv
 node_modules
 secrets
