@@ -6,14 +6,15 @@ const fs = require('fs');
 const fsPromises = require('fs').promises;
 const https = require('https');
 const { Pool } = require('pg');
-
 const app = express();
 const PORT = 3000;
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Load and parse the YAML configuration
 const configFile = fs.readFileSync('./config/creds.yaml', 'utf8');
 const config = yaml.load(configFile);
-
 // SSL configurations
 const privateKey = fs.readFileSync('../secrets/key.pem', 'utf8');
 const certificate = fs.readFileSync('../secrets/cert.pem', 'utf8');
@@ -22,7 +23,6 @@ const credentials = {
     cert: certificate, 
     passphrase: config.SSL_certificate.passphrase
 };
-
 // AWS PostgreSQL connection configuration using values from the YAML file
 const pool = new Pool({
     user: config.postgres_aws_db.username,
@@ -35,16 +35,7 @@ const pool = new Pool({
     }
 });
 
-// Use the cors middleware to enable CORS
-app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Set EJS as the view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 // sends the main webpage data
-// console.log(path.join(__dirname, '/public/html/main_index.html'))
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/html/main_index.html'));
 });
@@ -112,42 +103,53 @@ app.get('/game_options.js', (req, res) => {
 });
 
 app.get('/quiz', async (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/html/quiz.html'));
+  });
+
+app.get('/quiz-data', async (req, res) => {
     const chapterId = req.query.chapter_id;
     try {
         const result = await pool.query(
             "SELECT question_id, question, answer FROM question_answers WHERE chapter_id = $1 ORDER BY RANDOM() LIMIT 5",
             [chapterId]
         );
-
-        const questions = result.rows.map(row => row.question);
-        const answers = result.rows.map(row => row.answer);
+        // const questions = result.rows.map(row => row.question);
+        // const answers = result.rows.map(row => row.answer);
+        res.json(result.rows)
   
-        const questionsWithOptions = result.rows.map(row => {
-            // Remove the correct answer from the choices
-            const otherOptions = answers.filter(answer => answer !== row.answer);
+        // const questionsWithOptions = result.rows.map(row => {
+        //     // Remove the correct answer from the choices
+        //     const otherOptions = answers.filter(answer => answer !== row.answer);
             
-            // Randomly pick 3 other options
-            const randomOptions = [];
-            for (let i = 0; i < 3; i++) {
-                const randomIndex = Math.floor(Math.random() * otherOptions.length);
-                randomOptions.push(...otherOptions.splice(randomIndex, 1));
-            }
+        //     // Randomly pick 3 other options
+        //     const randomOptions = [];
+        //     for (let i = 0; i < 3; i++) {
+        //         const randomIndex = Math.floor(Math.random() * otherOptions.length);
+        //         randomOptions.push(...otherOptions.splice(randomIndex, 1));
+        //     }
 
-            // Merge the correct answer with the 3 other options and shuffle them
-            const allOptions = [row.answer, ...randomOptions].sort(() => Math.random() - 0.5);
+        //     // Merge the correct answer with the 3 other options and shuffle them
+        //     const allOptions = [row.answer, ...randomOptions];
+        //     // const allOptions = [row.answer, ...randomOptions].sort(() => Math.random() - 0.5);
+        //     for (let i = allOptions.length - 1; i > 0; i--) {
+        //       // Generate a random index between 0 and i (inclusive)
+        //       let j = Math.floor(Math.random() * (i + 1));
+        //       // Swap elements array[i] and array[j]
+        //       [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+        //     }
 
-            return {
-                text: row.question,
-                options: allOptions
-            };
-        });
+        //     return {
+        //         text: row.question,
+        //         options: allOptions
+        //     };
+        // });
 
-        // Send the first question and its options to the EJS view for rendering
-        res.render('quiz', {
-            currentQuestionText: questionsWithOptions[0].text,
-            currentOptions: questionsWithOptions[0].options,
-            questionStates: Array(5).fill('unanswered')
-        });
+        // // Send the first question and its options to the EJS view for rendering
+        // res.render('quiz', {
+        //     currentQuestionText: questionsWithOptions[0].text,
+        //     currentOptions: questionsWithOptions[0].options,
+        //     questionStates: Array(5).fill('unanswered')
+        // });
     }
     catch (err) {
       console.error('Error querying the database', err.stack);
@@ -155,14 +157,14 @@ app.get('/quiz', async (req, res) => {
     }
   });
   
-  // Add routes to serve the CSS and JS files for the quiz
-  app.get('/quiz.css', (req, res) => {
-      res.sendFile(path.join(__dirname, '/public/css/quiz.css'));
-  });
-  
-  app.get('/quiz.js', (req, res) => {
-      res.sendFile(path.join(__dirname, '/public/js/quiz.js'));
-  });
+// Add routes to serve the CSS and JS files for the quiz
+app.get('/quiz.css', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/css/quiz.css'));
+});
+
+app.get('/quiz.js', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/js/quiz.js'));
+});
 
 app.use(express.static(__dirname));
 

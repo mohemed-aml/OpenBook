@@ -1,0 +1,40 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/quiz.css">
+        <title>Quiz Game</title>
+    </head>
+    <body>
+        <div class="header">
+            <div class="scoreboard">
+                Score: <span class="score">0</span>/5
+            </div>
+            <div class="question-count">
+                Question: <span class="current-question">1</span>/5
+            </div>
+        </div>
+        
+        <div class="question-window"></div>
+        
+        <div class="option-container">
+            <div class="option" data-index="0"></div>
+            <div class="option" data-index="1"></div>
+            <div class="option" data-index="2"></div>
+            <div class="option" data-index="3"></div>
+        </div>
+        
+        <div class="feedback">
+        </div>
+        
+        <div class="progress">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <script src="/quiz.js"></script>
+    </body>
+    </html>
